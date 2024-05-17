@@ -29,19 +29,19 @@ public class StanzaBloccata extends Stanza{
 		
 		StringBuilder risultato = new StringBuilder();
     	risultato.append(this.getNome());
+    	
     	risultato.append("\nUscite: ");
-    	
     	for (String direzione : this.getDirezioni())
-    		if(direzione!=null && direzione.equals(this.nomeDirezione) && !(this.hasAttrezzo(nomeAttrezzo)))
+    		if(direzione.equals(this.nomeDirezione) && !(this.hasAttrezzo(nomeAttrezzo)))
     			risultato.append(" "+"DIREZIONE BLOCCATA!");
-    		else if(direzione!=null)
+    		else
     			risultato.append(" " + direzione);
-    	risultato.append("\nAttrezzi nella stanza: ");
     	
-    	for (Attrezzo attrezzo : this.getAttrezzi()) {
-    		if(attrezzo!=null)
-    			risultato.append(attrezzo.toString()+" ");
-    	}
+    	risultato.append("\nAttrezzi nella stanza: ");
+    	for (Attrezzo attrezzo : this.getAttrezzi())
+    		risultato.append(attrezzo.toString()+" ");
+    	
+    	
     	return risultato.toString();
 	}
 }

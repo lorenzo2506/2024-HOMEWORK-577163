@@ -8,11 +8,14 @@ import org.junit.jupiter.api.Test;
 import it.uniroma3.diadia.FabbricaDiComandi;
 import it.uniroma3.diadia.FabbricaDiComandiFisarmonica;
 import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ambienti.LabirintoBuilder;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 import it.uniroma3.diadia.giocatore.Borsa;
 
 class ComandoPosaTest {
 
+	Labirinto lab;
 	Partita partita;
 	FabbricaDiComandi factory;
 	Comando posa;
@@ -22,7 +25,8 @@ class ComandoPosaTest {
 	@BeforeEach
 	void setUp() {
 		
-		partita = new Partita();
+		lab = new LabirintoBuilder();
+		partita = new Partita(lab);
 		factory = new FabbricaDiComandiFisarmonica();
 		posa = new ComandoPosa();
 		pistola = new Attrezzo("pistola",8);

@@ -5,7 +5,8 @@ import java.util.Scanner;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 import it.uniroma3.diadia.comandi.Comando;
-
+import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ambienti.LabirintoBuilder;
 /**
  * Classe principale di diadia, un semplice gioco di ruolo ambientato al dia.
  * Per giocare crea un'istanza di questa classe e invoca il letodo gioca
@@ -35,8 +36,8 @@ public class DiaDia {
 	private Partita partita;
 	private IO console;
 
-	public DiaDia(IO console2) {
-		this.partita = new Partita();
+	public DiaDia(Labirinto lab, IO console2) {
+		this.partita = new Partita(lab);
 		this.console = console2;
 	}
 
@@ -74,7 +75,30 @@ public class DiaDia {
 	public static void main(String[] argc) {
 		
 		IO console = new IOConsole();
-		DiaDia gioco = new DiaDia(console);
+		
+		Labirinto lab = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio").addAttrezzo("osso",1)
+				.addStanzaVincente("Biblioteca")
+				.addStanza("AulaN10").addAttrezzo("lanterna", 3)
+				.addStanza("AulaN11")
+				.addStanza("Laboratorio Campus")
+				.addAdiacenza("Atrio","Biblioteca","nord")
+			    .addAdiacenza("Atrio","AulaN10","sud")
+			    .addAdiacenza("Atrio","AulaN11","est")
+			    .addAdiacenza("Atrio","Laboratorio Campus","ovest")
+			    .addAdiacenza("AulaN10", "AulaN11", "est")
+			    .addAdiacenza("AulaN10", "Laboratorio Campus", "ovest")
+			    .addAdiacenza("AulaN10", "Atrio", "nord")
+			    .addAdiacenza("AulaN11", "Atrio", "ovest")
+			    .addAdiacenza("AulaN11", "AulaN10", "sud")
+			    .addAdiacenza("AulaN11", "Laboratorio Campus", "est")
+			    .addAdiacenza("Laboratorio Campus", "Atrio", "est")
+			    .addAdiacenza("Laboratorio Campus", "AulaN10", "sud")
+			    .addAdiacenza("Laboratorio Campus", "AulaN11", "ovest")
+			    .addAdiacenza("Biblioteca", "Atrio", "sud");
+				
+		
+		DiaDia gioco = new DiaDia(lab,console);
 		gioco.gioca();
 	}
 }

@@ -5,15 +5,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ambienti.LabirintoBuilder;
 import it.uniroma3.diadia.ambienti.Stanza;
 
 class PartitaTest {
 
 	Partita partita;
+	Labirinto lab;
 	
 	@BeforeEach
 	void setUp() {
-		this.partita = new Partita();
+		this.lab = new LabirintoBuilder();
+		this.partita = new Partita(lab);
 	}
 	
 	@Test
