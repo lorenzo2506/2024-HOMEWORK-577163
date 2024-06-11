@@ -3,49 +3,37 @@ package it.uniroma3.diadia.comandi;
 import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
-import it.uniroma3.diadia.IOConsole;
-import it.uniroma3.diadia.IO;
+import it.uniroma3.diadia.giocatore.Borsa;
 
+/**
+ * Una classe che modella un comando che prende un oggetto dalla stanza e lo ripone nella borsa.
+ * @author Marco
+ * @version 4.0
+ *
+ */
 
-public class ComandoPrendi implements Comando{
+public class ComandoPrendi extends AbstractComando {
 
-	String nomeAttrezzo;
-	private IO console;
-	
 	@Override
-	public void esegui(Partita partita) {
-		
-		console = new IOConsole();
-		if(nomeAttrezzo==null)
-			console.mostraMessaggio("Che attrezzo vuoi prendere?");
-		
-		Attrezzo a=null;
-		Stanza stanzaCorrente = partita.getLabirinto().getStanzaCorrente();
-		
-		if(stanzaCorrente.hasAttrezzo(this.nomeAttrezzo)==false )
-			console.mostraMessaggio("l'attrezzo "+ nomeAttrezzo + " non e' in " + stanzaCorrente.getNome());
-		
+	public String esegui(Partita partita) {
+		Stanza stanzaCorrente = partita.getStanzaCorrente();
+		Borsa borsaGiocatore = partita.getGiocatore().getBorsa();
+		Attrezzo attrezzoDaPrendere = null;
+		if (this.getParametro() == null)
+			return "Cosa vuoi prendere?";
 		else {
-			a=stanzaCorrente.getAttrezzo(this.nomeAttrezzo);
-			partita.getGiocatore().getBorsa().addAttrezzo(a);
-	
-			if(stanzaCorrente.removeAttrezzo(a));
-				console.mostraMessaggio("OPERAZIONE COMPLETATA");
+			attrezzoDaPrendere = stanzaCorrente.getAttrezzo(this.getParametro());
+			if (attrezzoDaPrendere == null)
+				return "Attrezzo non presente nella stanza!";
+			else {
+				boolean preso = borsaGiocatore.addAttrezzo(attrezzoDaPrendere);
+				if (preso) {
+					stanzaCorrente.removeAttrezzo(this.getParametro());
+					return "Attrezzo preso!";
+				}
+				else
+					return "Attrezzo non preso, capienza massima borsa raggiunta!";
+			}
 		}
-	}
-	
-	@Override
-	public void setParametro(String parametro) {
-		this.nomeAttrezzo = parametro;
-	}
-	
-	@Override
-	public String getNome() {
-		return "prendi";
-	}
-	
-	@Override
-	public String getParametro() {
-		return "";
 	}
 }

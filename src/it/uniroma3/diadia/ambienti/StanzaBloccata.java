@@ -1,47 +1,30 @@
 package it.uniroma3.diadia.ambienti;
+/**@author Marco
+   @version 4.0
+ **/
+public class StanzaBloccata extends Stanza {
+	private String direzioneBloccata;
+	private String oggettoChiave;
 
-import it.uniroma3.diadia.attrezzi.Attrezzo;
-
-public class StanzaBloccata extends Stanza{
-
-	private String nomeDirezione;
-	private String nomeAttrezzo;
-	
-	public StanzaBloccata(String nome, String direzione, String attrezzo) {
-		
+	public StanzaBloccata(String nome, String direzioneBloccata, String oggettoChiave) {
 		super(nome);
-		this.nomeAttrezzo=attrezzo;
-		this.nomeDirezione=direzione;
+		this.direzioneBloccata = direzioneBloccata;
+		this.oggettoChiave = oggettoChiave;
 	}
-	
+
 	@Override
-	public Stanza getStanzaAdiacente(String dir) {
-		
-		if(hasAttrezzo(nomeAttrezzo) || !(dir.equals(nomeDirezione)))
-			return super.getStanzaAdiacente(dir);
-		
-		return this;
+	public Stanza getStanzaAdiacente(String direzione) {
+		if (direzione.equals(this.direzioneBloccata) && !this.hasAttrezzo(oggettoChiave))
+			return this;
+		else 
+			return super.getStanzaAdiacente(direzione);
+
 	}
-	
-	
+
 	@Override
 	public String getDescrizione() {
-		
-		StringBuilder risultato = new StringBuilder();
-    	risultato.append(this.getNome());
-    	
-    	risultato.append("\nUscite: ");
-    	for (String direzione : this.getDirezioni())
-    		if(direzione.equals(this.nomeDirezione) && !(this.hasAttrezzo(nomeAttrezzo)))
-    			risultato.append(" "+"DIREZIONE BLOCCATA!");
-    		else
-    			risultato.append(" " + direzione);
-    	
-    	risultato.append("\nAttrezzi nella stanza: ");
-    	for (Attrezzo attrezzo : this.getAttrezzi())
-    		risultato.append(attrezzo.toString()+" ");
-    	
-    	
-    	return risultato.toString();
+		return super.toString() + "\nLa porta che conduce a " + this.direzioneBloccata + " sembrerebbe essere chiusa a chiave,"
+				+ " trova qualcosa per sbloccarla.";
 	}
+
 }

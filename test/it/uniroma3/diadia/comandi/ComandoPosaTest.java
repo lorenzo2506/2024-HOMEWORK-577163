@@ -1,51 +1,51 @@
 package it.uniroma3.diadia.comandi;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import it.uniroma3.diadia.FabbricaDiComandi;
-import it.uniroma3.diadia.FabbricaDiComandiFisarmonica;
+import static org.junit.Assert.*;
 import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.ambienti.Labirinto;
-import it.uniroma3.diadia.ambienti.LabirintoBuilder;
+import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.comandi.ComandoPosa;
 import it.uniroma3.diadia.giocatore.Borsa;
 
-class ComandoPosaTest {
+import org.junit.Before;
+import org.junit.Test;
 
-	Labirinto lab;
-	Partita partita;
-	FabbricaDiComandi factory;
-	Comando posa;
-	Borsa borsa;
-	Attrezzo pistola;
-	
-	@BeforeEach
-	void setUp() {
-		
-		lab = new LabirintoBuilder();
-		partita = new Partita(lab);
-		factory = new FabbricaDiComandiFisarmonica();
-		posa = new ComandoPosa();
-		pistola = new Attrezzo("pistola",8);
+public class ComandoPosaTest {
+	private Partita partitaTest;
+	private AbstractComando comandoPosa;
+	private Stanza stanzaTest;
+	private Borsa borsaTest;
+
+	@Before
+	public void setUp() throws Exception {
+		partitaTest = new Partita();
+		comandoPosa = new ComandoPosa();
+		stanzaTest = new Stanza("Camera");
+		borsaTest = partitaTest.getGiocatore().getBorsa();
+		partitaTest.setStanzaCorrente(stanzaTest);
 	}
-	
-	
-	void testPosaAttrezzo() {
-		
-		borsa = partita.getGiocatore().getBorsa();
-		borsa.addAttrezzo(pistola);
-		
-		posa = factory.costruisciComando("posa pistola");
-		assertFalse(partita.getLabirinto().getStanzaCorrente().hasAttrezzo("pistola"));
-		
-		posa.esegui(partita);
-		
-		assertTrue(partita.getLabirinto().getStanzaCorrente().hasAttrezzo("pistola"));
-		assertFalse(partita.getGiocatore().getBorsa().hasAttrezzo("pistola"));
-		
-		
+
+	@Test
+	public void posaAttrezzoNonValido() {
+		comandoPosa.setParametro("Libro");
+		comandoPosa.esegui(partitaTest);
+		assertFalse(stanzaTest.hasAttrezzo("Libro"));
 	}
+
+	@Test
+	public void posaAttrezzoValido() {
+		borsaTest.addAttrezzo(new Attrezzo("Piccone", 4));
+		comandoPosa.setParametro("Piccone");
+		comandoPosa.esegui(partitaTest);
+		assertTrue(stanzaTest.hasAttrezzo("Piccone"));
+	}
+
+	@Test
+	public void posaAttrezzoNull() {
+		comandoPosa.setParametro(null);
+		comandoPosa.esegui(partitaTest);
+		assertTrue(stanzaTest.isEmpty());
+	}
+
+
 }

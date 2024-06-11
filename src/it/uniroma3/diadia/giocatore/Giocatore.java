@@ -1,26 +1,39 @@
 package it.uniroma3.diadia.giocatore;
 
-public class Giocatore {
+/**
+ * Questa classe modella il giocatore che dovr� muoversi all'interno del labirinto.
+ * @author Marco
+ * @see Borsa
+ * @version 4.0
+ */
 
-	Borsa borsa;
-	static final private int CFU_INIZIALI = 20;
+public class Giocatore {
 	private int cfu;
-    
+	private static int CFU_INIZIALI = 20;
+	private Borsa borsa;
+
 	public Giocatore() {
-		this.borsa = new Borsa(10);
-		this.cfu = CFU_INIZIALI; 
+		this.cfu = CFU_INIZIALI;
+		this.borsa = new Borsa();
 	}
-	
-	public Borsa getBorsa() {
-		return this.borsa;
+
+	public void setCfu(int cfu) {
+		this.cfu = cfu;
 	}
-	
+
 	public int getCfu() {
 		return this.cfu;
 	}
-	
-	public void setCfu(int cfu) {
-		this.cfu=cfu;
+
+	public Borsa getBorsa() {
+		return this.borsa;
 	}
-	
+
+	public int decrementaCfu() {
+		return this.cfu--;
+	}
+	@Override
+	public String toString() {
+		return "CFU: " + this.cfu + "\n" + borsa.toString();
+	}
 }

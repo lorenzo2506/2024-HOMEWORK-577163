@@ -1,60 +1,46 @@
 package it.uniroma3.diadia.ambienti;
+import it.uniroma3.diadia.attrezzi.*;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class StanzaBloccataTest {
+	private StanzaBloccata stanzaBloccata;
+	private Stanza altraStanza_1;
+	private Stanza altraStanza_2;
+	private Attrezzo attrezzoSbloccante;
+	private Attrezzo altroAttrezzo;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import it.uniroma3.diadia.attrezzi.Attrezzo;
 
-class StanzaBloccataTest {
-
-	
-	Attrezzo pass;
-	Attrezzo osso;
-	Stanza stanzaBloccata;
-	Stanza atrio;
-	Stanza biblioteca;
-	
-	@BeforeEach
-	void setUp() {
-		
-		pass = new Attrezzo("pass",5);
-		osso = new Attrezzo("osso", 3);
-		
-		stanzaBloccata = new StanzaBloccata("stanzaBloccata", "nord", "pass");
-		atrio = new Stanza("atrio");
-		biblioteca = new Stanza("biblioteca");
-		
+	@Before
+	public void setUp() {
+		stanzaBloccata = new StanzaBloccata("stanzaChiusa","nord","chiave");
+		stanzaBloccata.impostaStanzaAdiacente("nord", altraStanza_1);
+		attrezzoSbloccante = new Attrezzo("chiave",2);
+		stanzaBloccata.impostaStanzaAdiacente("sud", altraStanza_2);
 	}
-	
-	
+
 	@Test
-	void testStanzaAdiacente() {
-		
-		stanzaBloccata.impostaStanzaAdiacente("nord", atrio);
-		stanzaBloccata.impostaStanzaAdiacente("sud", biblioteca);
-		
-		assertEquals(stanzaBloccata.getStanzaAdiacente("nord"), stanzaBloccata);
-		assertEquals(stanzaBloccata.getStanzaAdiacente("sud"), biblioteca);
-		
-		stanzaBloccata.addAttrezzo(osso);
-		assertEquals(stanzaBloccata.getStanzaAdiacente("nord"), stanzaBloccata);
-		
-		stanzaBloccata.addAttrezzo(pass);
-		assertEquals(stanzaBloccata.getStanzaAdiacente("nord"), atrio);
+	public void testGetStanzaAdiacente_SenzaChiave() {
+		assertSame(this.stanzaBloccata,stanzaBloccata.getStanzaAdiacente("nord"));
+
 	}
-	
-	
+
 	@Test
-	void testGetDescrizione() {
-		
-		stanzaBloccata.impostaStanzaAdiacente("nord", atrio);
-		
-		assertTrue(stanzaBloccata.getDescrizione().contains("DIREZIONE BLOCCATA!"));
-		
-		stanzaBloccata.addAttrezzo(pass);
-		
-		assertFalse(stanzaBloccata.getDescrizione().contains("DIREZIONE BLOCCATA!"));
+	public void testGetStanzaAdiacente_ConChiave() {
+		stanzaBloccata.addAttrezzo(attrezzoSbloccante);
+		assertSame(altraStanza_1,stanzaBloccata.getStanzaAdiacente("nord"));
+
+	} 
+	@Test
+	public void testGetStanzaAdiacente_InDirezioneNonBloccata() {
+		assertSame(altraStanza_2,stanzaBloccata.getStanzaAdiacente("sud"));
 	}
+
+	@Test
+	public void testGetStanzaAdiacente_ConAltroAttrezzo() {
+		stanzaBloccata.addAttrezzo(altroAttrezzo);
+		assertSame(stanzaBloccata,stanzaBloccata.getStanzaAdiacente("nord"));
+	} 
 }

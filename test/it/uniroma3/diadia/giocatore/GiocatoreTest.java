@@ -1,30 +1,30 @@
 package it.uniroma3.diadia.giocatore;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+import it.uniroma3.diadia.giocatore.Giocatore;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-class GiocatoreTest {
+public class GiocatoreTest {
+	private Giocatore giocatore;
 
-	Giocatore giocatore;
-	
-	@BeforeEach
-	void setUp() {
-		this.giocatore =new Giocatore();
-	}
-	
-	@Test
-	void testSetCfu()
-	{
-		this.giocatore.setCfu(5);
-        assertEquals(5 , this.giocatore.getCfu());
+	@Before
+	public void setUp() throws Exception {
+		giocatore = new Giocatore();
 
 	}
-	
+
 	@Test
-	void testGetBorsa() {
-		assertNotNull(this.giocatore.getBorsa());
+	public void testSetCfu_ZEROCFU() {
+		giocatore.setCfu(0);
+		assertEquals(0, giocatore.getCfu());
+	}
+
+	@Test
+	public void testSetCfu_RANDOMCFU() {
+		giocatore.setCfu(35);
+		assertEquals(35, giocatore.getCfu());
 	}
 
 }

@@ -2,31 +2,16 @@ package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
 
-import it.uniroma3.diadia.IOConsole;
-import it.uniroma3.diadia.IO;
+/**
+ * Stampa un messaggio di errore se il comando non � presente tra l'elenco dei comandi.
+ * @author Marco
+ * @version 4.0
+ */
 
-public class ComandoNonValido implements Comando{
+public class ComandoNonValido extends AbstractComando {
 
-	IO console;
-	
 	@Override
-	public void esegui(Partita partita) {
-		
-		console = new IOConsole();
-		console.mostraMessaggio("Comando non valido!");
-	}
-	
-	@Override
-	public void setParametro(String parametro) {
-	}
-	
-	@Override
-	public String getNome() {
-		return "nonValido";
-	}
-	
-	@Override
-	public String getParametro() {
-		return "";
+	public String esegui(Partita partita) {
+		return "Comando non valido!";
 	}
 }

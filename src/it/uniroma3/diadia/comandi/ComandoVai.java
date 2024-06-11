@@ -1,48 +1,31 @@
 package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.ambienti.*;
 
-import it.uniroma3.diadia.IOConsole;
-import it.uniroma3.diadia.IO;
-import it.uniroma3.diadia.ambienti.Stanza;
+/**
+ * Classe che modella un comando che fa muovere il giocatore in una stanza adiacente, se esiste la direzione, 
+ * oppure restituisce un messaggio di errore.
+ * @author Marco
+ * @version 4.0
+ */
 
-public class ComandoVai implements Comando {
-	
-	private String direzione;
-	private IO console;
-	
+public class ComandoVai extends AbstractComando {
+
 	@Override
-	public void esegui(Partita partita) {
-		
-		console = new IOConsole();
-		
-		if(this.direzione==null) {
-			console.mostraMessaggio("dove vuoi andare?");
-			return;
+	public String esegui(Partita partita) {
+		if (this.getParametro() == null) 
+			return "Dove vuoi andare? Devi specificare una direzione"; 
+		Stanza prossimaStanza = null;
+		prossimaStanza = partita.getStanzaCorrente().getStanzaAdiacente(this.getParametro());
+		if(prossimaStanza == null)
+			return "Direzione inesistente";
+
+		else {
+			partita.setStanzaCorrente(prossimaStanza);
+			partita.getGiocatore().decrementaCfu();
+			return partita.getStanzaCorrente().getNome();
 		}
-		Stanza stanzaAdiacente = partita.getLabirinto().getStanzaCorrente().getStanzaAdiacente(direzione);
-		if(stanzaAdiacente==null) {
-			console.mostraMessaggio("direzione inesistente");
-			return;
-		}
-		
-		partita.getLabirinto().setStanzaCorrente(stanzaAdiacente);
-		int cfu = partita.getGiocatore().getCfu();
-		partita.getGiocatore().setCfu(cfu--);
-	}
-	
-	@Override
-	public void setParametro(String parametro) {
-		this.direzione= parametro;
-	}
-	
-	@Override
-	public String getNome() {
-		return "prendi";
-	}
-	
-	@Override
-	public String getParametro() {
-		return "";
 	}
 }
+

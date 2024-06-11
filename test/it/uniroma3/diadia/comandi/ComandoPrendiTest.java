@@ -1,80 +1,58 @@
 package it.uniroma3.diadia.comandi;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import it.uniroma3.diadia.FabbricaDiComandi;
-import it.uniroma3.diadia.FabbricaDiComandiFisarmonica;
+import static org.junit.Assert.*;
 import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.ambienti.Labirinto;
-import it.uniroma3.diadia.ambienti.LabirintoBuilder;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.comandi.ComandoPrendi;
+import it.uniroma3.diadia.giocatore.Borsa;
 
-class ComandoPrendiTest {
+import org.junit.Before;
+import org.junit.Test;
 
-	Labirinto lab;
-	Partita partita;
-	FabbricaDiComandi factory;
-	Comando prendi;
-	Attrezzo osso;
-	Attrezzo libro;
-	Stanza stanzaCorrente;
-	
-	@BeforeEach
-	void setUp() {
-		this.lab = new LabirintoBuilder();
-		this.partita = new Partita(lab);
-		this.factory = new FabbricaDiComandiFisarmonica();
-		this.libro = new Attrezzo("libro",4);
-		this.prendi = new ComandoPrendi();
-		this.osso = new Attrezzo("osso",2);
+public class ComandoPrendiTest {
+	private Partita partitaTest;
+	private AbstractComando comandoPrendi;
+	private Stanza stanzaTest;
+	private Borsa borsaTest;
+
+	@Before
+	public void setUp() {
+		partitaTest = new Partita();
+		comandoPrendi = new ComandoPrendi();
+		stanzaTest = new Stanza("Camera");
+		stanzaTest.addAttrezzo(new Attrezzo("Libro", 1));
+		stanzaTest.addAttrezzo(new Attrezzo("Comodino", 15));
+		borsaTest = partitaTest.getGiocatore().getBorsa();
+		partitaTest.setStanzaCorrente(stanzaTest);
 	}
-	
+
 	@Test
-	void testAddAttrezzo() {
-		/*
-		 * NT: nella stanza corrente ce già un oggetto "osso"
-		 */
-		
-		stanzaCorrente = partita.getLabirinto().getStanzaCorrente();
-		stanzaCorrente.addAttrezzo(libro);
-		
-		prendi = factory.costruisciComando("prendi libro");
-		
-		assertTrue(partita.getLabirinto().getStanzaCorrente().hasAttrezzo("libro"));
-		assertFalse(partita.getGiocatore().getBorsa().hasAttrezzo("libro"));
-		
-		prendi.esegui(partita);
-		
-		assertFalse(partita.getLabirinto().getStanzaCorrente().hasAttrezzo("libro"));
-		assertFalse(partita.getGiocatore().getBorsa().isEmpty());
-		assertTrue(partita.getGiocatore().getBorsa().hasAttrezzo("libro"));
-		
-		
-		prendi.setParametro(osso.getNome());
-		
-		prendi.esegui(partita);
-		
-
-		assertTrue(partita.getGiocatore().getBorsa().hasAttrezzo("libro"));
-		assertTrue(partita.getGiocatore().getBorsa().hasAttrezzo("osso"));
-
+	public void prendiAttrezzoNonValido() {
+		comandoPrendi.setParametro("Penna");
+		comandoPrendi.esegui(partitaTest);
+		assertTrue(borsaTest.isEmpty());
 	}
-	
+
 	@Test
-	void testAddAttrezzoParametroNull() {
-		
-		stanzaCorrente = partita.getLabirinto().getStanzaCorrente();
-		stanzaCorrente.addAttrezzo(libro);
-		
-		prendi = factory.costruisciComando("prendi");
-		
-		prendi.esegui(partita);
-		
-		assertTrue(partita.getGiocatore().getBorsa().isEmpty());
-		assertFalse(partita.giocatore.getBorsa().hasAttrezzo("libro"));
+	public void prendiAttrezzoValido() {
+		comandoPrendi.setParametro("Libro");
+		comandoPrendi.esegui(partitaTest);
+		assertFalse(borsaTest.isEmpty());
 	}
+
+	@Test
+	public void prendiAttrezzoTroppoPesante() {
+		comandoPrendi.setParametro("Comodino");
+		comandoPrendi.esegui(partitaTest);
+		assertTrue(borsaTest.isEmpty());
+	}
+
+	@Test
+	public void prendiAttrezzoNull() {
+		comandoPrendi.setParametro(null);
+		comandoPrendi.esegui(partitaTest);
+		assertTrue(borsaTest.isEmpty());
+	}
+
 }

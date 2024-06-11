@@ -1,44 +1,29 @@
 package it.uniroma3.diadia.ambienti;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+import it.uniroma3.diadia.ambienti.Labirinto;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-class LabirintoTest {
+public class LabirintoTest {
+	private Labirinto labirinto;
 
-	Labirinto lab;
-	Stanza atrio2;
-	Stanza biblioteca2;
-	
-	@BeforeEach
-	void setUp() {
-		
-		lab = new Labirinto();
-		atrio2 = new Stanza("Atrio");
-		biblioteca2 = new Stanza("Biblioteca");
+	@Before
+	public void setUp() throws Exception {
+		labirinto = new Labirinto();
 	}
-	
-	@Test
-	void testStanzaVincente() {
-		assertEquals(biblioteca2.getNome(), lab.getStanzaVincente().getNome());
-	}
-	
-	@Test
-	void testStanzaCorrente() {
-		assertEquals(atrio2.getNome(), lab.getStanzaCorrente().getNome());
-		
-		lab.setStanzaCorrente(biblioteca2);
-		
-		assertEquals(biblioteca2.getNome(), lab.getStanzaCorrente().getNome());
-	}
-	
-	
-	@Test
-	void testStanzaAdiacente() {
-		
-		assertEquals(biblioteca2.getNome(), lab.getStanzaCorrente().getStanzaAdiacente("nord").getNome());
 
+	@Test
+	public void testGetStanzaVincente() {
+		Stanza biblioteca = new Stanza("Biblioteca");
+		assertEquals(biblioteca.getNome(),this.labirinto.getStanzaVincente().getNome());
+	}
+
+	@Test
+	public void testGetStanzaCorrente(){
+		Stanza atrio = new Stanza("Atrio");
+		assertEquals(atrio.getNome(),this.labirinto.getStanzaIniziale().getNome());
 	}
 
 }

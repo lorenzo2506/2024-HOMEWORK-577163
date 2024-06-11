@@ -1,32 +1,21 @@
 package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.IOConsole;
-import it.uniroma3.diadia.IO;
+import it.uniroma3.diadia.ambienti.Stanza;
+import it.uniroma3.diadia.giocatore.Giocatore;
 
-public class ComandoGuarda implements Comando{
+/**
+ * Restituisce la descrizione della stanza in cui si trova il giocatore e delle sue statistiche.
+ * @author Marco
+ * @version 4.0
+ */
 
-	IO console;
+public class ComandoGuarda extends AbstractComando {
+
 	@Override
-	public void esegui(Partita partita) {
-		
-		console = new IOConsole();
-		console.mostraMessaggio(partita.getLabirinto().getStanzaCorrente().getDescrizione());
+	public String esegui(Partita partita) {
+		Stanza stanzaCorrente = partita.getStanzaCorrente();
+		Giocatore giocatore = partita.getGiocatore();
+		return (stanzaCorrente.getDescrizione() + "\n" + giocatore.toString());
 	}
-	
-	@Override
-	public void setParametro(String parametro) {
-		
-	}
-	
-	@Override
-	public String getNome() {
-		return "guarda";
-	}
-	
-	@Override
-	public String getParametro() {
-		return "";
-	}
-	
 }

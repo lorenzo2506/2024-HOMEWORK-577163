@@ -2,37 +2,23 @@ package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
 
-import it.uniroma3.diadia.IO;
-import it.uniroma3.diadia.IOConsole;
+/**
+ * Comando che stampa l'elenco dei comandi disponibili al giocatore.
+ * @author Marco
+ * @version 4.0
+ */
 
-public class ComandoAiuto implements Comando{
+public class ComandoAiuto extends AbstractComando {
+	private String[] elencoComandi = {"vai", "aiuto", "fine", "prendi", "posa",
+			"guarda","saluta", "interagisci","regala"};
 
-	private String[] elencoComandi = {"vai", "aiuto", "guarda", "posa", "prendi", "fine"};;
-	private IO console;
-	
 	@Override
-	public void esegui(Partita partita) {
-		
-		console = new IOConsole();
+	public String esegui(Partita partita) {
+		String s = new String(); 
 		for(int i=0; i< elencoComandi.length; i++) 
-			console.mostraMessaggio(elencoComandi[i]+" ");
-		console.mostraMessaggio("\n");
-	}
-	
-	@Override
-	public void setParametro(String parametro) {
-		
-	}
-	
+			s+= elencoComandi[i] + " ";
+		return s;
 
-	@Override
-	public String getNome() {
-		return "aiuto";
 	}
-	
-	@Override
-	public String getParametro() {
-		return "";
-	}
-	
+
 }

@@ -1,40 +1,38 @@
 package it.uniroma3.diadia.ambienti;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
-class StanzaBuiaTest {
+public class StanzaBuiaTest {
+	private StanzaBuia stanzaBuia;
+	private Attrezzo fonteDiLuce;
+	private Attrezzo altroAttrezzo;
 
-	
-	Stanza stanzaBuia;
-	Attrezzo pass;
-	Attrezzo libro;
-	
-	@BeforeEach
-	void setUp() {
-		stanzaBuia = new StanzaBuia("stanzaBuia","pass");
-		pass = new Attrezzo("pass",5);
-		libro = new Attrezzo("libro",3);
+
+	@Before
+	public void setUp() {
+		stanzaBuia = new StanzaBuia("stanzaTest","lanterna");
+		fonteDiLuce = new Attrezzo("lanterna",2);
+		altroAttrezzo = new Attrezzo("altroAttrezzo",1);
+
 	}
-	
-	
-	@Test
-	void testGetDescrizione() {
-		
-		assertTrue(stanzaBuia.getDescrizione().equals("qui c'e' un buio pesto"));
-		
-		stanzaBuia.addAttrezzo(libro);
-		
-		assertTrue(stanzaBuia.getDescrizione().equals("qui c'e' un buio pesto"));
-		
-		stanzaBuia.addAttrezzo(pass);
-		
-		assertFalse(stanzaBuia.getDescrizione().equals("qui c'e' un buio pesto"));
 
+	@Test
+	public void testGetDescrizioneSenzaFonteDiLuce() {
+		assertEquals("Qui c'è buio pesto.",stanzaBuia.getDescrizione());
+	}
+
+	@Test
+	public void testGetDescrizioneConAltroAttrezzo() {
+		stanzaBuia.addAttrezzo(altroAttrezzo);
+		assertEquals("Qui c'è buio pesto.",stanzaBuia.getDescrizione());
+	}
+
+	@Test
+	public void testGetDescrizioneConFonteDiLuce() {
+		stanzaBuia.addAttrezzo(fonteDiLuce);
+		assertNotEquals("Qui c'è buio pesto.",stanzaBuia.getDescrizione());
 	}
 
 }

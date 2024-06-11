@@ -1,33 +1,18 @@
 package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.IOConsole;
-import it.uniroma3.diadia.IO;
 
-public class ComandoFine implements Comando{
+/**
+ * Classe che modella il comando che termina la partita.
+ * @author Marco
+ * @version 4.0
+ */
 
-	IO console;
-	
+public class ComandoFine extends AbstractComando {
+
 	@Override
-	public void esegui(Partita partita) {
-		
-		console = new IOConsole();
-		partita.setFinita();
-		console.mostraMessaggio("Grazie di aver giocato");
+	public String esegui(Partita partita) {
+		return ("Grazie di aver giocato!");  // si desidera smettere
 	}
-	
-	@Override
-	public void setParametro(String parametro) {
-		
-	}
-	
-	@Override
-	public String getNome() {
-		return "fine";
-	}
-	
-	@Override
-	public String getParametro() {
-		return "";
-	}
+
 }
